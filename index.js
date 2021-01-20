@@ -1,6 +1,8 @@
-// REQUIRE STATEMENTS
+// DEPENDENCIES
 const inquirer = require("inquirer");
 const mysql = require("mysql");
+const cTable = require("console.table");
+
 
 // MAKE CONNECTION TO THE DATABASE
 const connection = mysql.createConnection({
@@ -28,7 +30,7 @@ function init() {
     .prompt([
       {
         type: "list",
-        choices: [],
+        choices: ["View employees by department", "Quit"],
         message: "What would you like to do?",
         name: "userInput",
       },
