@@ -1,4 +1,5 @@
 // REQUIRE STATEMENTS
+const inquirer = require("inquirer");
 const mysql = require("mysql");
 
 // MAKE CONNECTION TO THE DATABASE
@@ -13,10 +14,27 @@ const connection = mysql.createConnection({
 
   // Your password
   password: "beagle",
-  database: "employeeDB"
+  database: "employeeDB",
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
+  init();
 });
+
+function init() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        choices: [],
+        message: "What would you like to do?",
+        name: "userInput",
+      },
+    ])
+    .then(({ userinput }) => {
+      switch (userInput) {
+      }
+    });
+}
