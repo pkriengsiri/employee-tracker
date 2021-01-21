@@ -170,11 +170,6 @@ function getDepartments() {
 
 // Add a function to update employee role
 function updateEmployeeRole() {
-  // Get list of roles
-  // Get list of employees
-  // Prompt user to select a role
-  // Make query to update role to selected role
-
   const queryString = `SELECT * FROM role;`;
   connection.query(queryString, (err, data) => {
     if (err) throw err;
