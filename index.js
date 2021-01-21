@@ -48,7 +48,7 @@ function viewAllEmployeesByDepartment() {
     const departmentsArray = data.map((department) => {
       return { name: department.name, value: department.id };
     });
-    console.log(departmentsArray);
+    // console.log(departmentsArray);
     inquirer
       .prompt([
         {
@@ -77,7 +77,7 @@ function viewAllEmployeesByDepartment() {
 
 // Shows all employees by manager
 function viewAllEmployeesByManager() {
-    const queryString = `SELECT CONCAT(e.first_name," ", e.last_name) as 'Employee', r.title as 'Title', IFNULL(CONCAT(m.first_name," ", m.last_name),'No Manager') as 'Manager', d.name as 'Department'
+  const queryString = `SELECT CONCAT(e.first_name," ", e.last_name) as 'Employee', r.title as 'Title', IFNULL(CONCAT(m.first_name," ", m.last_name),'No Manager') as 'Manager', d.name as 'Department'
     FROM employee e
     LEFT JOIN employee m
         on m.id = e.manager_id
@@ -90,6 +90,76 @@ function viewAllEmployeesByManager() {
     if (err) throw err;
     console.table(data);
     init();
+  });
+}
+
+// Adds an employee
+function addEmployee() {
+  const queryString = `SELECT * FROM role;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    const rolesArray = data.map((role) => {
+      return { name: role.title, value: role.id };
+    });
+    const queryString = `SELECT * FROM employee;`;
+    connection.query(queryString, (err, data) => {
+      if (err) throw err;
+      const employeeArray = data.map((employee) => {
+        return {
+          name: `${employee.first_name} ${employee.last_name}`,
+          value: employee.id,
+        };
+      });
+      const noneOption = { name: "None", value: null };
+      employeeArray.unshift(noneOption);
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            message: "What is the employee's first name?",
+            name: "firstName",
+          },
+          {
+            type: "input",
+            message: "What is the employee's last name?",
+            name: "lastName",
+          },
+          {
+            type: "list",
+            message: "Please select the employee's role",
+            choices: rolesArray,
+            name: "role",
+          },
+          {
+            type: "list",
+            message: "Please select the employee's manager",
+            choices: employeeArray,
+            name: "manager",
+          },
+        ])
+        .then(({ firstName, lastName, role, manager }) => {
+          //console.log(response);
+          const queryString = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUE (?, ?, ?,?);`;
+          connection.query(queryString, [firstName, lastName, role, manager],(err, data) => {
+            if (err) throw err;
+            console.log("The employee has been added!");
+            init();
+          });
+        });
+    });
+  });
+}
+
+// View list of departments
+function getDepartments() {
+  const queryString = `SELECT * FROM department;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    const departmentsArray = data.map((department) => {
+      return { name: department.name, value: department.id };
+    });
+    return departmentsArray;
   });
 }
 
@@ -109,6 +179,7 @@ function init() {
           "View all employees",
           "View all employees by department",
           "View all employees by manager",
+          "Add an employee",
           "Quit",
         ],
         message: "What would you like to do?",
@@ -125,6 +196,9 @@ function init() {
           return;
         case "View all employees by manager":
           viewAllEmployeesByManager();
+          return;
+        case "Add an employee":
+          addEmployee();
           return;
         default:
           quit();
