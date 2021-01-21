@@ -156,6 +156,40 @@ function addEmployee() {
   });
 }
 
+// Delete an employee
+function deleteEmployee() {
+  const queryString = `SELECT * FROM employee;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    const employeeArray = data.map((employee) => {
+      return {
+        name: `${employee.first_name} ${employee.last_name}`,
+        value: employee.id,
+      };
+    });
+    console.log(employeeArray);
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "Please select the employee's manager",
+          choices: employeeArray,
+          name: "employee",
+        },
+      ])
+      .then(({ employee }) => {
+        const queryString = `
+        DELETE FROM employee
+        WHERE id = ?;`;
+        connection.query(queryString, [employee], (err, data) => {
+          if (err) throw err;
+          console.log("Successfully deleted the employee");
+          init();
+        });
+      });
+  });
+}
+
 // Update an employees' role
 function updateEmployeeRole() {
   const queryString = `SELECT * FROM role;`;
@@ -229,7 +263,6 @@ function viewRoles() {
 // Add a function to add a department
 // Add a function to add a role
 
-// Add a function to remove an employee
 // Add a function to remove an department
 // Add a function to remove an role
 // Add a function to update employee manager
@@ -253,11 +286,12 @@ function init() {
           "View all employees by department",
           "View all employees by manager",
           "Add an employee",
+          "Delete an employee",
           "Update an employee's role",
           "View all departments",
           "View all roles",
           "Quit",
-          new inquirer.Separator()
+          new inquirer.Separator(),
         ],
         message: "What would you like to do?",
         name: "userInput",
@@ -276,6 +310,9 @@ function init() {
           break;
         case "Add an employee":
           addEmployee();
+          break;
+        case "Delete an employee":
+          deleteEmployee();
           break;
         case "Update an employee's role":
           updateEmployeeRole();
