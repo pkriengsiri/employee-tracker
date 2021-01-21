@@ -75,6 +75,24 @@ function viewAllEmployeesByDepartment() {
   });
 }
 
+// Shows all employees by manager
+function viewAllEmployeesByManager() {
+    const queryString = `SELECT CONCAT(e.first_name," ", e.last_name) as 'Employee', r.title as 'Title', IFNULL(CONCAT(m.first_name," ", m.last_name),'No Manager') as 'Manager', d.name as 'Department'
+    FROM employee e
+    LEFT JOIN employee m
+        on m.id = e.manager_id
+    INNER JOIN role r
+        on e.role_id = r.id
+    INNER JOIN department d
+        on r.department_id = d.id;
+    `;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    console.table(data);
+    init();
+  });
+}
+
 // Exits the application
 function quit() {
   console.log("Goodbye.\nHave a nice day.");
@@ -90,6 +108,7 @@ function init() {
         choices: [
           "View all employees",
           "View all employees by department",
+          "View all employees by manager",
           "Quit",
         ],
         message: "What would you like to do?",
@@ -103,6 +122,9 @@ function init() {
           return;
         case "View all employees by department":
           viewAllEmployeesByDepartment();
+          return;
+        case "View all employees by manager":
+          viewAllEmployeesByManager();
           return;
         default:
           quit();
