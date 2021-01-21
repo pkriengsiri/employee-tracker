@@ -22,7 +22,5 @@ const addEmployeeMessage =
 ╚════════════╝
 `;
 
-console.log(addEmployeeMessage);
-
 module.exports = {welcomeMessage, addEmployeeMessage};
 

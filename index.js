@@ -26,10 +26,10 @@ connection.connect(function (err) {
 // Shows all employees
 function viewAllEmployees() {
   const queryString = `
-  SELECT CONCAT(e.first_name," ",e.last_name) as 'Employee Name', r.title as 'Role', r.salary as 'Salary', CONCAT(m.first_name," ",m.last_name) as 'Manager Name'
+  SELECT CONCAT(e.first_name," ",e.last_name) as 'Employee Name', r.title as 'Role', r.salary as 'Salary', IFNULL(CONCAT(m.first_name," ",m.last_name),'No Manager') as 'Manager Name'
     FROM employee e
-    INNER JOIN employee m
-        on e.id = m.id
+    LEFT JOIN employee m
+        on e.manager_id = m.id
     INNER JOIN role r
         on r.id = e.role_id;
     `;
@@ -95,7 +95,7 @@ function viewAllEmployeesByManager() {
 
 // Adds an employee
 function addEmployee() {
-  console.log(addEmployeeMessage);
+  //console.log(addEmployeeMessage);
   const queryString = `SELECT * FROM role;`;
   connection.query(queryString, (err, data) => {
     if (err) throw err;
@@ -257,6 +257,7 @@ function init() {
           "View all departments",
           "View all roles",
           "Quit",
+          new inquirer.Separator()
         ],
         message: "What would you like to do?",
         name: "userInput",
