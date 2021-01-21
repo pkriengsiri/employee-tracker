@@ -25,18 +25,29 @@ connection.connect(function (err) {
   init();
 });
 
+
+function quit() {
+    console.log("Goodbye.\n Have a nice day.");
+    connection.end();
+}
+
 function init() {
   inquirer
     .prompt([
       {
         type: "list",
-        choices: ["View employees by department", "Quit"],
+        choices: ["Show all employees", "Quit"],
         message: "What would you like to do?",
         name: "userInput",
       },
     ])
-    .then(({ userinput }) => {
+    .then(({ userInput }) => {
       switch (userInput) {
+          case "Show all employees":
+              showAllEmployees()
+              return;
+          default:
+                  
       }
     });
 }
