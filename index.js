@@ -40,7 +40,40 @@ function viewAllEmployees() {
   });
 }
 
-// 
+//  Shows all employees by department
+function viewAllEmployeesByDepartment() {
+  const queryString = `SELECT * FROM department;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    const departmentsArray = data.map((department) => {
+      return { name: department.name, value: department.id };
+    });
+    console.log(departmentsArray);
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          choices: departmentsArray,
+          message: "Please select a department",
+          name: "departmentId",
+        },
+      ])
+      .then(({ departmentId }) => {
+        const queryString = `SELECT e.first_name as 'First Name', e.last_name as 'Last Name', d.name as 'Department'
+                FROM employee e, role r, department d
+                WHERE e.role_id = r.id AND r.department_id = ? AND d.id = ?;`;
+        connection.query(
+          queryString,
+          [departmentId, departmentId],
+          (err, data) => {
+            if (err) throw err;
+            console.table(data);
+            init();
+          }
+        );
+      });
+  });
+}
 
 // Exits the application
 function quit() {
@@ -54,7 +87,11 @@ function init() {
     .prompt([
       {
         type: "list",
-        choices: ["View all employees", "Quit"],
+        choices: [
+          "View all employees",
+          "View all employees by department",
+          "Quit",
+        ],
         message: "What would you like to do?",
         name: "userInput",
       },
@@ -63,6 +100,9 @@ function init() {
       switch (userInput) {
         case "View all employees":
           viewAllEmployees();
+          return;
+        case "View all employees by department":
+          viewAllEmployeesByDepartment();
           return;
         default:
           quit();
