@@ -25,7 +25,7 @@ connection.connect(function (err) {
 });
 
 // Shows all employees
-function showAllEmployees() {
+function viewAllEmployees() {
   const queryString = `SELECT e.first_name as 'First Name', e.last_name 'Last Name', r.title as 'Role', r.salary as 'Salary', m.first_name as 'Manager First Name', m.last_name as 'Manager Last Name'
     FROM employee e
     INNER JOIN employee m
@@ -40,6 +40,8 @@ function showAllEmployees() {
   });
 }
 
+// 
+
 // Exits the application
 function quit() {
   console.log("Goodbye.\nHave a nice day.");
@@ -52,15 +54,15 @@ function init() {
     .prompt([
       {
         type: "list",
-        choices: ["Show all employees", "Quit"],
+        choices: ["View all employees", "Quit"],
         message: "What would you like to do?",
         name: "userInput",
       },
     ])
     .then(({ userInput }) => {
       switch (userInput) {
-        case "Show all employees":
-          showAllEmployees();
+        case "View all employees":
+          viewAllEmployees();
           return;
         default:
           quit();
