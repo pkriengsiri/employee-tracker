@@ -170,6 +170,8 @@ function getDepartments() {
 // Add a function to remove an department
 // Add a function to remove an role
 // Add a function to update employee manager
+// Reorder columns in "View all employees by manager" query
+// Concat names
 
 
 // Exits the application
