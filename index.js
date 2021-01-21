@@ -25,7 +25,8 @@ connection.connect(function (err) {
 
 // Shows all employees
 function viewAllEmployees() {
-  const queryString = `SELECT e.first_name as 'First Name', e.last_name 'Last Name', r.title as 'Role', r.salary as 'Salary', m.first_name as 'Manager First Name', m.last_name as 'Manager Last Name'
+  const queryString = `
+  SELECT CONCAT(e.first_name," ",e.last_name) as 'Employee Name', r.title as 'Role', r.salary as 'Salary', CONCAT(m.first_name," ",m.last_name) as 'Manager Name'
     FROM employee e
     INNER JOIN employee m
         on e.id = m.id
