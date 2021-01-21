@@ -15,5 +15,14 @@ const welcomeMessage =
    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝                                                                                                                                              
 `;
 
-module.exports = welcomeMessage;
+const addEmployeeMessage = 
+`
+╔════════════╗
+ Add Employee
+╚════════════╝
+`;
+
+console.log(addEmployeeMessage);
+
+module.exports = {welcomeMessage, addEmployeeMessage};
 

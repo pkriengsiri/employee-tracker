@@ -2,7 +2,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const cTable = require("console.table");
-const welcomeMessage = require("./utils/asciiArt")
+const { welcomeMessage, addEmployeeMessage } = require("./utils/asciiArt");
 
 // MAKE CONNECTION TO THE DATABASE
 const connection = mysql.createConnection({
@@ -94,6 +94,7 @@ function viewAllEmployeesByManager() {
 
 // Adds an employee
 function addEmployee() {
+  console.log(addEmployeeMessage);
   const queryString = `SELECT * FROM role;`;
   connection.query(queryString, (err, data) => {
     if (err) throw err;
@@ -139,11 +140,15 @@ function addEmployee() {
         .then(({ firstName, lastName, role, manager }) => {
           const queryString = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
           VALUE (?, ?, ?,?);`;
-          connection.query(queryString, [firstName, lastName, role, manager],(err, data) => {
-            if (err) throw err;
-            console.log("The employee has been added!");
-            init();
-          });
+          connection.query(
+            queryString,
+            [firstName, lastName, role, manager],
+            (err, data) => {
+              if (err) throw err;
+              console.log("The employee has been added!");
+              init();
+            }
+          );
         });
     });
   });
@@ -172,7 +177,6 @@ function getDepartments() {
 // Add a function to update employee manager
 // Reorder columns in "View all employees by manager" query
 // Concat names
-
 
 // Exits the application
 function quit() {
