@@ -77,7 +77,7 @@ function viewAllEmployeesByDepartment() {
 
 // Shows all employees by manager
 function viewAllEmployeesByManager() {
-  const queryString = `SELECT CONCAT(e.first_name," ", e.last_name) as 'Employee', r.title as 'Title', IFNULL(CONCAT(m.first_name," ", m.last_name),'No Manager') as 'Manager', d.name as 'Department'
+  const queryString = `SELECT CONCAT(e.first_name," ", e.last_name) as 'Employee', r.title as 'Title', d.name as 'Department', IFNULL(CONCAT(m.first_name," ", m.last_name),'No Manager') as 'Manager' 
     FROM employee e
     LEFT JOIN employee m
         on m.id = e.manager_id
@@ -246,7 +246,9 @@ function viewDepartments() {
   });
 }
 
-// Add a function to view roles
+// Add a department
+
+// View all roles
 function viewRoles() {
   const queryString = `
   SELECT r.id, r.title, r.salary, d.name as 'Department'
@@ -260,8 +262,7 @@ function viewRoles() {
   });
 }
 
-// Add a function to add a department
-// Add a function to add a role
+// Add a role
 
 // Add a function to remove an department
 // Add a function to remove an role
@@ -290,6 +291,7 @@ function init() {
           "Update an employee's role",
           "View all departments",
           "View all roles",
+          new inquirer.Separator(),
           "Quit",
           new inquirer.Separator(),
         ],
