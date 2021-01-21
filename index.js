@@ -166,11 +166,67 @@ function getDepartments() {
   });
 }
 
+
+
+// Add a function to update employee role
+function updateEmployeeRole() {
+  // Get list of roles
+  // Get list of employees
+  // Prompt user to select a role
+  // Make query to update role to selected role
+
+  const queryString = `SELECT * FROM role;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    const rolesArray = data.map((role) => {
+      return { name: role.title, value: role.id };
+    });
+    const queryString = `SELECT * FROM employee;`;
+    connection.query(queryString, (err, data) => {
+      if (err) throw err;
+      const employeeArray = data.map((employee) => {
+        return {
+          name: `${employee.first_name} ${employee.last_name}`,
+          value: employee.id,
+        };
+      });
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            message: "Which employee would you like to update?",
+            name: "employee",
+            choices: employeeArray
+          },
+          {
+            type: "list",
+            message: "Which role would you like to assign the employee?",
+            name: "role",
+            choices: rolesArray
+          }
+        ])
+        .then(({ employee, role }) => {
+          const queryString = `UPDATE employee
+          SET role_id = ?
+          WHERE id = ?;`;
+          connection.query(
+            queryString,
+            [role, employee],
+            (err, data) => {
+              if (err) throw err;
+              console.log("The employee's role has been updated!");
+              init();
+            }
+          );
+        });
+    });
+  });
+}
+
 // Add a function to add a department
 // Add a function to add a role
 // Add a function to view departments
 // Add a function to view roles
-// Add a function to update employee role
 // Add a function to remove an employee
 // Add a function to remove an department
 // Add a function to remove an role
@@ -194,6 +250,7 @@ function init() {
           "View all employees",
           "View all employees by department",
           "View all employees by manager",
+          "Update an employee's role",
           "Add an employee",
           "Quit",
         ],
@@ -205,16 +262,19 @@ function init() {
       switch (userInput) {
         case "View all employees":
           viewAllEmployees();
-          return;
+          break;
         case "View all employees by department":
           viewAllEmployeesByDepartment();
-          return;
+          break;
         case "View all employees by manager":
           viewAllEmployeesByManager();
-          return;
+          break;
         case "Add an employee":
           addEmployee();
-          return;
+          break;
+        case "Update an employee's role":
+          updateEmployeeRole();
+          break;
         default:
           quit();
       }
