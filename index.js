@@ -138,7 +138,6 @@ function addEmployee() {
           },
         ])
         .then(({ firstName, lastName, role, manager }) => {
-          //console.log(response);
           const queryString = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
           VALUE (?, ?, ?,?);`;
           connection.query(queryString, [firstName, lastName, role, manager],(err, data) => {
