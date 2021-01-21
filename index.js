@@ -154,21 +154,7 @@ function addEmployee() {
   });
 }
 
-// View list of departments
-function getDepartments() {
-  const queryString = `SELECT * FROM department;`;
-  connection.query(queryString, (err, data) => {
-    if (err) throw err;
-    const departmentsArray = data.map((department) => {
-      return { name: department.name, value: department.id };
-    });
-    return departmentsArray;
-  });
-}
-
-
-
-// Add a function to update employee role
+// Update an employees' role
 function updateEmployeeRole() {
   const queryString = `SELECT * FROM role;`;
   connection.query(queryString, (err, data) => {
@@ -191,36 +177,41 @@ function updateEmployeeRole() {
             type: "list",
             message: "Which employee would you like to update?",
             name: "employee",
-            choices: employeeArray
+            choices: employeeArray,
           },
           {
             type: "list",
             message: "Which role would you like to assign the employee?",
             name: "role",
-            choices: rolesArray
-          }
+            choices: rolesArray,
+          },
         ])
         .then(({ employee, role }) => {
           const queryString = `UPDATE employee
           SET role_id = ?
           WHERE id = ?;`;
-          connection.query(
-            queryString,
-            [role, employee],
-            (err, data) => {
-              if (err) throw err;
-              console.log("The employee's role has been updated!");
-              init();
-            }
-          );
+          connection.query(queryString, [role, employee], (err, data) => {
+            if (err) throw err;
+            console.log("The employee's role has been updated!");
+            init();
+          });
         });
     });
   });
 }
 
+// Add a function to view departments
+function viewDepartments() {
+  const queryString = `SELECT * FROM department;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    console.table(data);
+    init()
+  });
+}
+
 // Add a function to add a department
 // Add a function to add a role
-// Add a function to view departments
 // Add a function to view roles
 // Add a function to remove an employee
 // Add a function to remove an department
@@ -245,8 +236,9 @@ function init() {
           "View all employees",
           "View all employees by department",
           "View all employees by manager",
-          "Update an employee's role",
           "Add an employee",
+          "Update an employee's role",
+          "View all departments",
           "Quit",
         ],
         message: "What would you like to do?",
@@ -269,6 +261,9 @@ function init() {
           break;
         case "Update an employee's role":
           updateEmployeeRole();
+          break;
+        case "View all departments":
+          viewDepartments();
           break;
         default:
           quit();
