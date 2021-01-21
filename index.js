@@ -2,6 +2,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const cTable = require("console.table");
+const welcomeMessage = require("./utils/asciiArt")
 
 // MAKE CONNECTION TO THE DATABASE
 const connection = mysql.createConnection({
@@ -21,6 +22,7 @@ const connection = mysql.createConnection({
 connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
+  console.log(welcomeMessage);
   init();
 });
 
@@ -161,6 +163,17 @@ function getDepartments() {
     return departmentsArray;
   });
 }
+
+// Add a function to add a department
+// Add a function to add a role
+// Add a function to view departments
+// Add a function to view roles
+// Add a function to update employee role
+// Add a function to remove an employee
+// Add a function to remove an department
+// Add a function to remove an role
+// Add a function to update employee manager
+
 
 // Exits the application
 function quit() {
