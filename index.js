@@ -138,7 +138,8 @@ function addEmployee() {
           },
         ])
         .then(({ firstName, lastName, role, manager }) => {
-          const queryString = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          const queryString = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
           VALUE (?, ?, ?,?);`;
           connection.query(
             queryString,
@@ -200,19 +201,33 @@ function updateEmployeeRole() {
   });
 }
 
-// Add a function to view departments
+// View all departments
 function viewDepartments() {
   const queryString = `SELECT * FROM department;`;
   connection.query(queryString, (err, data) => {
     if (err) throw err;
     console.table(data);
-    init()
+    init();
+  });
+}
+
+// Add a function to view roles
+function viewRoles() {
+  const queryString = `
+  SELECT r.id, r.title, r.salary, d.name as 'Department'
+  FROM role r
+  LEFT JOIN department d
+      on r.department_id = d.id;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    console.table(data);
+    init();
   });
 }
 
 // Add a function to add a department
 // Add a function to add a role
-// Add a function to view roles
+
 // Add a function to remove an employee
 // Add a function to remove an department
 // Add a function to remove an role
@@ -239,6 +254,7 @@ function init() {
           "Add an employee",
           "Update an employee's role",
           "View all departments",
+          "View all roles",
           "Quit",
         ],
         message: "What would you like to do?",
@@ -264,6 +280,9 @@ function init() {
           break;
         case "View all departments":
           viewDepartments();
+          break;
+        case "View all roles":
+          viewRoles();
           break;
         default:
           quit();
