@@ -2,7 +2,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const cTable = require("console.table");
-const { welcomeMessage, addEmployeeMessage } = require("./utils/asciiArt");
+const { welcomeMessage } = require("./utils/asciiArt");
 
 // MAKE CONNECTION TO THE DATABASE
 const connection = mysql.createConnection({
@@ -364,9 +364,6 @@ function addRole() {
       });
   });
 }
-
-// Add a function to remove an department
-// Add a function to remove an role
 
 // Exits the application
 function quit() {

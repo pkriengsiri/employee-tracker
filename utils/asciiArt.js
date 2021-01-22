@@ -15,12 +15,5 @@ const welcomeMessage =
    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝                                                                                                                                              
 `;
 
-const addEmployeeMessage = 
-`
-╔════════════╗
- Add Employee
-╚════════════╝
-`;
-
-module.exports = {welcomeMessage, addEmployeeMessage};
+module.exports = {welcomeMessage};
 
