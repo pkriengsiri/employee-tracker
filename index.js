@@ -247,6 +247,25 @@ function viewDepartments() {
 }
 
 // Add a department
+function addDepartment() {
+    inquirer.prompt(
+        [
+            {
+                type: "input",
+                message: "Please enter the name of the department to create",
+                name: "department"
+            }
+        ]).then(({department}) => {
+            const queryString = `
+            INSERT INTO department (name)
+            VALUE (?);`;
+            connection.query(queryString,[department],(err, data) => {
+                if(err) throw err;
+                console.log("Your department has been created.");
+                init();
+            })
+    });
+}
 
 // View all roles
 function viewRoles() {
@@ -290,6 +309,7 @@ function init() {
           "Delete an employee",
           "Update an employee's role",
           "View all departments",
+          "Add a department",
           "View all roles",
           new inquirer.Separator(),
           "Quit",
@@ -322,6 +342,9 @@ function init() {
         case "View all departments":
           viewDepartments();
           break;
+        case "Add a department":
+          addDepartment();
+          break;  
         case "View all roles":
           viewRoles();
           break;
