@@ -95,7 +95,6 @@ function viewAllEmployeesByManager() {
 
 // Adds an employee
 function addEmployee() {
-  //console.log(addEmployeeMessage);
   const queryString = `SELECT * FROM role;`;
   connection.query(queryString, (err, data) => {
     if (err) throw err;
@@ -167,7 +166,6 @@ function deleteEmployee() {
         value: employee.id,
       };
     });
-    console.log(employeeArray);
     inquirer
       .prompt([
         {
