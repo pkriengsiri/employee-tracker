@@ -5,9 +5,9 @@ VALUES ("Management"), ("Accounting"), ("Human Resources"), ("Engineering"), ("R
 
 INSERT INTO role (title, salary, department_id)
 VALUES ("CEO", 200000, 1),
-	("CFO", 180000, 1),
+	   ("CFO", 180000, 1),
        ("COO", 180000, 1),
-	("Accounting Manager", 100000, 2),
+	   ("Accounting Manager", 100000, 2),
        ("Accountant", 80000, 2),
        ("HR Manager", 100000,3),
        ("HR Generalist", 70000,3),
@@ -26,5 +26,5 @@ VALUES ("CEO", 200000, 1),
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Lauren","Cornish", 1, null),
-	("Owen","Churchill", 2, 1),
+	   ("Owen","Churchill", 2, 1),
        ("Lisa", "Reid", 3, 1);
