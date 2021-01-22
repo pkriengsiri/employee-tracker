@@ -2,7 +2,7 @@
 A command-line CMS for managing employee data
 
 ## Description
-This application is a command-line based content management system which can be used to manage employee data. It is written using JavaScript and should be run using the Node.js JavaScript runtime environment.  The node package manager inquirer is used to provide the interface for the application and to prompt the user for inputs.
+This application is a command-line based content management system which can be used to manage employee data. It is written using JavaScript and MySQL and should be run using the Node.js JavaScript runtime environment.  The node package manager inquirer is used to provide the interface for the application and to prompt the user for inputs.
 
 ### CMS Functionality
 * View all employees
@@ -15,6 +15,11 @@ This application is a command-line based content management system which can be 
 * View all departments
 * Add a department
 * Add a role
+
+### NPM Dependencies
+* console.table
+* inquirer
+* mysql
 
 [Link to the repository](https://github.com/pkriengsiri/employee-tracker)
   
