@@ -236,6 +236,45 @@ function updateEmployeeRole() {
   });
 }
 
+// Update an employee's manager
+function updateManager() {
+  const queryString = `SELECT * FROM employee;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    const employeeArray = data.map((employee) => {
+      return {
+        name: `${employee.first_name} ${employee.last_name}`,
+        value: employee.id,
+      };
+    });
+    inquirer.prompt(
+        [
+            {
+                type: "list",
+                choices: employeeArray,
+                message: "Choose and employee to update:",
+                name: "employee"
+            },
+            {
+                type: "list",
+                choices: employeeArray,
+                message: "Select the employee's new manager:",
+                name: "manager"
+            }
+        ]
+    ).then(({employee, manager}) => {
+        const queryString = `UPDATE employee
+          SET manager_id = ?
+          WHERE id = ?;`;
+        connection.query(queryString,[manager, employee], (err, data) => {
+            if (err) throw err;
+            console.log("The employee has been updated.")
+            init();
+        })
+    });
+  });
+}
+
 // View all departments
 function viewDepartments() {
   const queryString = `SELECT * FROM department;`;
@@ -248,22 +287,23 @@ function viewDepartments() {
 
 // Add a department
 function addDepartment() {
-    inquirer.prompt(
-        [
-            {
-                type: "input",
-                message: "Please enter the name of the department to create",
-                name: "department"
-            }
-        ]).then(({department}) => {
-            const queryString = `
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Please enter the name of the department to create",
+        name: "department",
+      },
+    ])
+    .then(({ department }) => {
+      const queryString = `
             INSERT INTO department (name)
             VALUE (?);`;
-            connection.query(queryString,[department],(err, data) => {
-                if(err) throw err;
-                console.log("Your department has been created.");
-                init();
-            })
+      connection.query(queryString, [department], (err, data) => {
+        if (err) throw err;
+        console.log("Your department has been created.");
+        init();
+      });
     });
 }
 
@@ -282,12 +322,51 @@ function viewRoles() {
 }
 
 // Add a role
+function addRole() {
+  const queryString = `SELECT * FROM department;`;
+  connection.query(queryString, (err, data) => {
+    if (err) throw err;
+    const departmentsArray = data.map((department) => {
+      return { name: department.name, value: department.id };
+    });
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Please enter the role title:",
+          name: "title",
+        },
+        {
+          type: "input",
+          message: "Please enter the role salary:",
+          name: "salary",
+        },
+        {
+          type: "list",
+          choices: departmentsArray,
+          message: "Please select a department:",
+          name: "department_id",
+        },
+      ])
+      .then(({ title, salary, department_id }) => {
+        const queryString = `
+      INSERT INTO role (title, salary, department_id)
+      VALUE (?, ?, ?);`;
+        connection.query(
+          queryString,
+          [title, salary, department_id],
+          (err, data) => {
+            if (err) throw err;
+            console.log("Your department has been created.");
+            init();
+          }
+        );
+      });
+  });
+}
 
 // Add a function to remove an department
 // Add a function to remove an role
-// Add a function to update employee manager
-// Reorder columns in "View all employees by manager" query
-// Concat names
 
 // Exits the application
 function quit() {
@@ -308,9 +387,11 @@ function init() {
           "Add an employee",
           "Delete an employee",
           "Update an employee's role",
+          "Update an employee's manager",
           "View all departments",
           "Add a department",
           "View all roles",
+          "Add a role",
           new inquirer.Separator(),
           "Quit",
           new inquirer.Separator(),
@@ -339,14 +420,20 @@ function init() {
         case "Update an employee's role":
           updateEmployeeRole();
           break;
+        case "Update an employee's manager":
+          updateManager();
+          break;
         case "View all departments":
           viewDepartments();
           break;
         case "Add a department":
           addDepartment();
-          break;  
+          break;
         case "View all roles":
           viewRoles();
+          break;
+        case "Add a role":
+          addRole();
           break;
         default:
           quit();
